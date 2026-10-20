@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+**/.env
+
+# Databases and transient database files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+
+# OS and IDE files
+.DS_Store
+.idea/
+.vscode/
+
+# Logs and generated outputs
+*.log
+outputs/
+reports/generated/
