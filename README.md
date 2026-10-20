@@ -1,75 +1,103 @@
-# eRaksha — Agentic AI-Powered IoT Security System
+# eRaksha — IoT Security & Network Anomaly Detection
 
-**Team:** Aegis  
-**Author:** Spraha Vats  
-**Institution:** Indian Institute of Technology Delhi
+**Team Aegis · Spraha Vats · Indian Institute of Technology Delhi**
+
+[![Python](https://img.shields.io/badge/Python-3.15-blue)](https://www.python.org/)
+[![Tests](https://img.shields.io/badge/Tests-18%20passing-brightgreen)](#testing)
+[![Status](https://img.shields.io/badge/Status-Prototype-orange)](#scope-and-limitations)
+
+An extensible IoT security prototype developed from Team Aegis's hackathon concept, combining simulated device discovery, unsupervised network anomaly detection, explainable alerts, SQLite persistence, and a local monitoring dashboard.
 
 ## Achievement
 
-**7th Place Nationwide — e-Raksha National Cybersecurity Hackathon 2026**
+**7th place nationwide — e-Raksha National Cybersecurity Hackathon 2026**
 
-Team Aegis secured **7th place among approximately 1,500 teams across India** in a 36-hour national cybersecurity hackathon conducted by the CyberPeace Foundation in collaboration with the Ministry of Home Affairs.
+Team Aegis placed **7th among approximately 1,500 teams across India** in a 36-hour national cybersecurity hackathon conducted by the CyberPeace Foundation in collaboration with the Ministry of Home Affairs.
 
-The hackathon challenged participants to develop cybersecurity solutions under a demanding 36-hour development timeline. Our team worked on **eRaksha, an agentic AI-powered IoT security system**, exploring device discovery, network anomaly detection, video analytics and deception-based threat intelligence.
+The original project concept explored an agentic approach to IoT security, bringing together device discovery, network anomaly detection, video analytics, and deception-based threat intelligence. This repository develops a reproducible software prototype of selected components.
 
-The project was developed as a cybersecurity prototype focused on monitoring IoT environments and identifying potentially suspicious behaviour.
+## Architecture
 
-## Project Overview
+```mermaid
+flowchart TD
+    A["Simulated Device Discovery"] --> B["Device Inventory"]
+    C["Synthetic Traffic Generator"] --> D["Network Flows"]
+    B --> E[("SQLite Database")]
+    D --> E
+    E --> F["Feature Transformation"]
+    F --> G["Isolation Forest Detector"]
+    G --> H["Anomaly Scores & Explanations"]
+    H --> E
+    E --> I["Flask Monitoring Dashboard"]
+    J["Synthetic Evaluation Dataset"] --> K["Evaluation Metrics"]
+    G -. "Model evaluation" .-> K
+```
 
-eRaksha is a modular IoT security prototype combining device inventory, network-flow simulation, unsupervised anomaly detection, SQLite persistence and a local monitoring dashboard.
+The current pipeline is designed for reproducible experimentation. Device discovery and traffic generation are simulated by default; the prototype does not claim to monitor a live network.
 
-The current reproducible implementation focuses on synthetic network-flow analysis and simulated device discovery. It provides a foundation for evaluating anomaly detection and visualising potentially suspicious activity, while the broader hackathon concept explores multiple complementary security agents.
+## Implemented Features
 
-## Core Components
+### 1. Simulated Device Inventory
+- Generates a reproducible inventory of example IoT devices.
+- Tracks device attributes and records whether an entry is simulated or observed.
+- Persists device records in SQLite.
 
-- **Device Discovery Agent:** Designed to identify and catalogue devices and their network characteristics.
-- **Network Anomaly Detection Agent:** Uses an Isolation Forest model to identify unusual patterns in network-flow features.
-- **Video Analytics Agent — proposed extension:** Explores camera-based object detection and behavioural analysis.
-- **Deception Intelligence Agent — proposed extension:** Explores honeypot-based collection of suspicious interaction signals.
-- **Monitoring Dashboard:** Displays device inventory, stored flows and flagged observations through a local Flask interface.
+### 2. Unsupervised Network Anomaly Detection
+- Uses an Isolation Forest model from scikit-learn.
+- Learns a reference distribution from normal synthetic traffic.
+- Evaluates flow features including outbound bytes, inbound bytes, and duration.
+- Produces anomaly scores and threshold-based flags.
 
-*Implementation note: the current tested codebase implements synthetic device discovery, network-flow simulation, anomaly scoring, database persistence and dashboard monitoring. The video analytics, honeypot and live-network capabilities are broader project directions and should not be interpreted as fully implemented features.*
+### 3. Explainable Alerts
+- Adds human-readable heuristic explanations to flagged flows.
+- Persists detection results for inspection.
+- Treats anomaly scores as indicators of unusual behaviour, **not probabilities of an attack**.
+
+### 4. Persistent Storage
+- Uses SQLite to store device inventory, network flows, anomaly scores, flags, and explanations.
+- Initializes the database schema and supports a migration for the device-source field.
+
+### 5. Local Monitoring Dashboard
+- Displays device inventory and traffic summaries.
+- Lists flagged flows with anomaly explanations.
+- Exposes a local status endpoint at `/api/status`.
+- Binds to `127.0.0.1` for local development.
 
 ## Technology Stack
 
-- Python
-- NumPy
-- scikit-learn — Isolation Forest
-- SQLite
-- Flask
-- pytest
+| Technology | Purpose |
+|---|---|
+| Python | Core implementation |
+| NumPy | Numerical operations |
+| scikit-learn | Isolation Forest anomaly detection |
+| SQLite | Persistent storage |
+| Flask | Monitoring dashboard and status API |
+| pytest | Automated testing |
+| Scapy | Networking-related development dependency |
 
-## Current Prototype Features
+## Getting Started
 
-- Reproducible generation of synthetic normal and suspicious network flows.
-- Unsupervised anomaly detection trained on normal reference traffic.
-- Persisted anomaly scores, flags and human-readable explanations.
-- Device inventory with simulated/observed provenance labels.
-- Local monitoring dashboard with device inventory and anomaly alerts.
-- Automated tests for core functionality and dashboard endpoints.
+### Prerequisites
 
-## Evaluation
+- Python 3.15.0, as used during development
+- Git
+- A terminal and web browser
 
-The detector is evaluated using held-out synthetic data with known labels. Metrics include precision, recall, F1 score and false-positive rate.
+### 1. Clone the repository
 
-These results measure performance on the synthetic dataset only and do not establish equivalent performance on real-world IoT networks.
+```bash
+git clone https://github.com/sprahavats/eRaksha-IoT-Security.git
+cd eRaksha-IoT-Security
+```
 
-## Security and Limitations
+### 2. Create and activate a virtual environment
 
-- Synthetic traffic is explicitly labelled as simulated.
-- Anomaly flags indicate unusual behaviour, not confirmed attacks.
-- Live network discovery and real-world validation remain future work.
-- The dashboard is intended for local development and binds to `127.0.0.1`.
-- API keys, `.env` files, local databases and other sensitive information must not be committed to version control.
+```bash
+python3.15 -m venv .venv
+source .venv/bin/activate
+```
 
-## Future Work
+### 3. Install dependencies
 
-- Implement authorised, opt-in local-network discovery.
-- Validate the detector using appropriately collected and labelled real IoT traffic.
-- Explore video analytics and honeypot-based threat intelligence.
-- Evaluate lightweight deployment on edge hardware.
-- Improve alert prioritisation and per-device behavioural analysis.
-
-## Project Status
-
-A tested prototype for synthetic IoT-flow anomaly detection and local security monitoring, developed from the broader eRaksha hackathon concept.
+```bash
+python
