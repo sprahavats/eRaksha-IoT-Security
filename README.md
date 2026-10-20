@@ -16,6 +16,10 @@ Team Aegis placed **7th among approximately 1,500 teams across India** in a 36-h
 
 The original project concept explored an agentic approach to IoT security, bringing together device discovery, network anomaly detection, video analytics, and deception-based threat intelligence. This repository develops a reproducible software prototype of selected components.
 
+## Dashboard Preview
+
+![eRaksha IoT Security Dashboard](docs/images/dashboard.png)
+
 ## Architecture
 
 ```mermaid
